@@ -1,0 +1,52 @@
+{% extends "core/template.html" %}
+{% block title %} CER2-BackEnd - Sistema Integrado de Notificaciones {% endblock %}
+
+{% block headTitle %} <foo style="font-size: 50px; border-top: 100px;">Sistema Integrado de Notificaciones</foo> {% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <form method="get" action="{% url 'home' %}">
+            {% csrf_token %}
+            <select name="departamentos" id="selectDepto" style="margin: 10px; margin-left: 30px;">
+                <option value="---" selected>---</option>
+                {% for iEnt in dataEnt %}
+                <option value="{{ iEnt.nombre }}">{{ iEnt.nombre }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Filtrar">
+        </form>
+
+        <ul>
+            {% for iCom in dataCom %}
+                {% if departamento_sel == "---" %}
+                    {% if iCom.visible == True %}
+                    <li style="display: inline-block" >
+                        <div class="card" style="width: 18rem; margin-right: 25px; margin-bottom: 25px;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ iCom.titulo }}</h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">{{ iCom.entidad.nombre }}</h6>
+                                <p class="card-text">{{ iCom.detalle }}</p>
+                            </div>
+                        </div>
+                    </li>
+                    {% endif %}
+                {% else %}
+                    {% if iCom.visible == True and iCom.entidad.nombre == departamento_sel %}
+                        <li style="display: inline-block" >
+                            <div class="card" style="width: 18rem; margin-right: 25px; margin-bottom: 25px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ iCom.titulo }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-body-secondary">{{ iCom.entidad.nombre }}</h6>
+                                    <p class="card-text">{{ iCom.detalle }}</p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+
+
+    </div>
+{% endblock %}
